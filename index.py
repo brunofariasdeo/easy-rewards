@@ -18,7 +18,7 @@ PROFILE_PATH = os.getenv('PROFILE_PATH')
 options = Options()
 options.add_argument("headless")
 options.add_argument(f'user-data-dir={PROFILE_PATH}')
-options.add_argument('profile-directory=Default')
+options.add_argument(f'profile-directory={PROFILE_NAME}')
 
 driver = webdriver.Edge(options = options, executable_path=EXECUTABLE_PATH)
 
