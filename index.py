@@ -4,7 +4,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from essential_generators import DocumentGenerator
 from dotenv import load_dotenv
+
 import os
+import random
 import time
 
 load_dotenv()
@@ -30,4 +32,4 @@ for x in range(100):
   bingSearch.send_keys(Keys.SHIFT + Keys.HOME)
   bingSearch.send_keys(generatedSentence)
   bingSearch.send_keys(Keys.ENTER)
-  time.sleep(2.5)
+  time.sleep(random.randint(0, 9))
