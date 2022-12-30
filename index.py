@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from essential_generators import DocumentGenerator
 from dotenv import load_dotenv
 
@@ -25,11 +26,23 @@ driver = webdriver.Edge(options = options, executable_path=EXECUTABLE_PATH)
 driver.get('https://bing.com')
 documentGenerator = DocumentGenerator()
 
-for x in range(100):
-  generatedSentence = documentGenerator.sentence()
+while True:
+  try:
+    rewardsPoints = driver.find_element(By.ID, 'id_rc').text
 
-  bingSearch = driver.find_element(By.ID, 'sb_form_q')
-  bingSearch.send_keys(Keys.SHIFT + Keys.HOME)
-  bingSearch.send_keys(generatedSentence)
-  bingSearch.send_keys(Keys.ENTER)
-  time.sleep(random.randint(0, 9))
+    generatedSentence = documentGenerator.sentence()
+
+    bingSearch = driver.find_element(By.ID, 'sb_form_q')
+    bingSearch.send_keys(Keys.SHIFT + Keys.HOME)
+    bingSearch.send_keys(generatedSentence)
+    bingSearch.send_keys(Keys.ENTER)
+
+    time.sleep(random.randint(0, 9))
+
+    if (driver.find_element(By.ID, 'id_rc').text == rewardsPoints):
+      break
+
+  except NoSuchElementException:
+    time.sleep(5)
+  except StaleElementReferenceException:
+    time.sleep(5)
