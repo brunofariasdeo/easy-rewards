@@ -6,10 +6,22 @@ import time
 
 try:
   with Rewards() as bot:
-    bot.navigate_to_page("https://bing.com")
 
     try:
+      bot.navigate_to_page('https://rewards.bing.com/')
+      bot.find_available_tasks()
+
+      time.sleep(5)
+
+      window_name = bot.window_handles[1]
+
+      bot.switch_to.window(window_name=window_name)
+      bot.close()
+
+      time.sleep(5)
+
       areTherePointsToRedeem = True
+      bot.navigate_to_page("https://bing.com")
 
       while areTherePointsToRedeem:
         documentGenerator = DocumentGenerator()

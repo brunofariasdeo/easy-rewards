@@ -17,7 +17,7 @@ PROFILE_NAME = os.getenv('PROFILE_NAME')
 PROFILE_PATH = os.getenv('PROFILE_PATH')
 
 options = Options()
-options.add_argument("headless")
+# options.add_argument("headless")
 options.add_argument(f'user-data-dir={PROFILE_PATH}')
 options.add_argument(f'profile-directory={PROFILE_NAME}')
 

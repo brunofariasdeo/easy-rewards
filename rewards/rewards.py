@@ -12,6 +12,7 @@ import time
 class Rewards(webdriver.Edge):
   def __init__(self):
     self.pointsToRedeem = True
+    self.tasksToClick = True
 
     options = Options()
     options.add_argument("headless")
@@ -20,6 +21,10 @@ class Rewards(webdriver.Edge):
 
     service = Service(executable_path=constants.EXECUTABLE_PATH)
     super(Rewards, self).__init__(options = options, service = service)
+
+  def find_available_tasks(self):
+    availableTask = self.find_element(By.XPATH, '//div[contains(@data-bi-id, "Default")]')
+    availableTask.click()
 
   def get_current_rewards_points(self):
     return self.find_element(By.ID, 'id_rc').text
