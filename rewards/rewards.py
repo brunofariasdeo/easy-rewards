@@ -23,14 +23,31 @@ class Rewards(webdriver.Edge):
     super(Rewards, self).__init__(options = options, service = service)
 
   def find_available_tasks(self):
-    availableTask = self.find_element(By.XPATH, '//div[contains(@data-bi-id, "Default")]')
-    availableTask.click()
+    try:
+      while(self.tasksToClick):
+        availableTask = self.find_element(By.XPATH, '//div[contains(@class, "rewards-card-container")]//span[contains(@class, "AddMedium")]')
+
+        availableTask.click()
+
+        time.sleep(5)
+
+        self.switch_page_to_home()
+    except NoSuchElementException:
+      self.tasksToClick = False
+
 
   def get_current_rewards_points(self):
     return self.find_element(By.ID, 'id_rc').text
 
   def navigate_to_page(self, url):
     self.get(url)
+    time.sleep(5)
+
+  def switch_page_to_home(self):
+    window_name = self.window_handles[0]
+
+    self.switch_to.window(window_name=window_name)
+
     time.sleep(5)
 
   def type_in_search_bar(self, string):
