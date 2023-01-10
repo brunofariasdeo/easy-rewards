@@ -4,7 +4,9 @@ from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from essential_generators import DocumentGenerator
 
+import random
 import rewards.constants as constants
 import os
 import time
@@ -42,6 +44,26 @@ class Rewards(webdriver.Edge):
   def navigate_to_page(self, url):
     self.get(url)
     time.sleep(5)
+
+  def search_on_bing(self):
+    self.navigate_to_page("https://bing.com")
+
+    try:
+      while(self.pointsToRedeem):
+        documentGenerator = DocumentGenerator()
+        generatedSentence = documentGenerator.sentence()
+        
+        time.sleep(random.randint(0, 9))
+
+        rewardsPointsBeforeSearch = self.get_current_rewards_points()
+        self.type_in_search_bar(generatedSentence)
+
+        time.sleep(3)
+
+        if (rewardsPointsBeforeSearch == self.get_current_rewards_points()):
+          self.pointsToRedeem = False
+    except Exception:
+      time.sleep(2)
 
   def switch_page_to_home(self):
     window_name = self.window_handles[0]

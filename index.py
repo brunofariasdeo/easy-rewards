@@ -13,26 +13,7 @@ try:
 
       time.sleep(5)
 
-      areTherePointsToRedeem = True
-      bot.navigate_to_page("https://bing.com")
-
-      while areTherePointsToRedeem:
-        try:
-          documentGenerator = DocumentGenerator()
-          generatedSentence = documentGenerator.sentence()
-          
-          time.sleep(random.randint(0, 9))
-
-          rewardsPointsBeforeSearch = bot.get_current_rewards_points()
-          bot.type_in_search_bar(generatedSentence)
-
-          time.sleep(3)
-
-          if (rewardsPointsBeforeSearch == bot.get_current_rewards_points()):
-            break
-
-        except:
-          time.sleep(3)
+      bot.search_on_bing()
 
     except Exception as e:
       raise
