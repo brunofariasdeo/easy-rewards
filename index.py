@@ -1,7 +1,5 @@
 from rewards.rewards import Rewards
-from essential_generators import DocumentGenerator
 
-import random
 import time
 
 try:

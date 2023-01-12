@@ -3,12 +3,11 @@ from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException
 from essential_generators import DocumentGenerator
 
 import random
 import rewards.constants as constants
-import os
 import time
 
 class Rewards(webdriver.Edge):
