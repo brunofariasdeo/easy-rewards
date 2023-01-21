@@ -16,7 +16,7 @@ class Rewards(webdriver.Edge):
     self.tasksToClick = True
 
     options = Options()
-    options.add_argument("headless")
+    # options.add_argument("headless")
     options.add_argument(f'user-data-dir={constants.PROFILE_PATH}')
     options.add_argument(f'profile-directory={constants.PROFILE_NAME}')
 
@@ -46,6 +46,35 @@ class Rewards(webdriver.Edge):
     logging.info("Navigating to page: " + url)
     self.get(url)
     time.sleep(5)
+
+  def play_a_game(self, gameName):
+    self.navigate_to_page("https://www.xbox.com/pt-BR/play")
+    logging.info("Opening Xbox Cloud.")
+
+    time.sleep(5)
+
+    authenticateButton = self.find_element(By.XPATH, '//a[contains(text(), "Entrar")]')
+    authenticateButton.click()
+
+    time.sleep(5)
+
+    try:
+      game = self.find_element(By.XPATH, f'//div[contains(text(), "{gameName}")]/ancestor::div[contains(@class, "BaseItem")]')
+      game.click()
+      logging.info("Game found. Clicked on it.")
+
+      time.sleep(5)
+
+      confirmButton = self.find_element(By.XPATH, '//button[contains(text(), "Continuar mesmo assim")]')
+      confirmButton.click()
+      logging.info("Confirm button found. Clicked on it.")
+      logging.info(f"{gameName} will be running for 10 minutes. This page will be closed once finished.")
+
+      time.sleep(600)
+    except Exception as e:
+      print("Exception", e)
+      logging.info("Game not found. Moving on.")
+
 
   def search_on_bing(self):
     self.navigate_to_page("https://bing.com")

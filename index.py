@@ -14,6 +14,10 @@ def run_bot():
 
         bot.search_on_bing()
 
+        time.sleep(5)
+
+        bot.play_a_game("Fortnite")
+
       except Exception as e:
         raise
 
