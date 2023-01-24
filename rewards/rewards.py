@@ -16,7 +16,7 @@ class Rewards(webdriver.Edge):
     self.tasksToClick = True
 
     options = Options()
-    # options.add_argument("headless")
+    options.add_argument("headless")
     options.add_argument(f'user-data-dir={constants.PROFILE_PATH}')
     options.add_argument(f'profile-directory={constants.PROFILE_NAME}')
 
@@ -35,7 +35,7 @@ class Rewards(webdriver.Edge):
 
         self.switch_page_to_home()
     except NoSuchElementException:
-      logging.info("Tasks not found. Moving on.")
+      logging.info("You've already completed all tasks. Moving on.")
       self.tasksToClick = False
 
 
@@ -72,7 +72,6 @@ class Rewards(webdriver.Edge):
 
       time.sleep(600)
     except Exception as e:
-      print("Exception", e)
       logging.info("Game not found. Moving on.")
 
 
@@ -94,9 +93,10 @@ class Rewards(webdriver.Edge):
         time.sleep(3)
 
         if (rewardsPointsBeforeSearch == self.get_current_rewards_points()):
-          logging.info("No points were awarded. Moving on.")
+          logging.info("You've already completed all searches. Moving on.")
           self.pointsToRedeem = False
-    except Exception:
+    except Exception as e:
+      logging.error("Error while trying to search on Bing.", e)
       time.sleep(2)
 
   def switch_page_to_home(self):
