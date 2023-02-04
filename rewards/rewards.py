@@ -38,6 +38,18 @@ class Rewards(webdriver.Edge):
       logging.info("You've already completed all tasks. Moving on.")
       self.tasksToClick = False
 
+  def find_login_button(self):
+    time.sleep(5)
+
+    try:
+      authenticateButton = self.find_element(By.XPATH, '//a[contains(text(), "Entrar")]')
+
+      if (len(authenticateButton) > 0):
+        logging.info("Authenticating.")
+        authenticateButton.click()
+    except Exception as e:
+      logging.info("Login button not found.")
+      time.sleep(5)
 
   def get_current_rewards_points(self):
     return self.find_element(By.ID, 'id_rc').text
@@ -51,12 +63,7 @@ class Rewards(webdriver.Edge):
     self.navigate_to_page("https://www.xbox.com/pt-BR/play")
     logging.info("Opening Xbox Cloud.")
 
-    time.sleep(5)
-
-    authenticateButton = self.find_element(By.XPATH, '//a[contains(text(), "Entrar")]')
-    authenticateButton.click()
-
-    time.sleep(5)
+    self.find_login_button()
 
     try:
       game = self.find_element(By.XPATH, f'//div[contains(text(), "{gameName}")]/ancestor::div[contains(@class, "BaseItem")]')
@@ -90,7 +97,7 @@ class Rewards(webdriver.Edge):
         logging.info("You currently have " + rewardsPointsBeforeSearch + " points.")
 
         self.type_in_search_bar(generatedSentence)
-        time.sleep(3)
+        time.sleep(5)
 
         if (rewardsPointsBeforeSearch == self.get_current_rewards_points()):
           logging.info("You've already completed all searches. Moving on.")
