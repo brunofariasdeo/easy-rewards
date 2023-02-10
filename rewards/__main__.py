@@ -1,8 +1,12 @@
 import logging
 from rewards.rewards import Rewards
 import time
+import typer
 
-def run_bot():
+app = typer.Typer()
+
+@app.command()
+def run():
   try:
     with Rewards() as bot:
 
@@ -26,6 +30,52 @@ def run_bot():
   except Exception as e:
     raise
 
+@app.command()
+def find_available_tasks():
+  try:
+    with Rewards() as bot:
+
+      try:
+        bot.navigate_to_page('https://rewards.bing.com/')
+        bot.find_available_tasks()
+      except Exception as e:
+        raise
+
+      bot.close()
+
+  except Exception as e:
+    raise
+
+@app.command()
+def play_a_game():
+  try:
+    with Rewards() as bot:
+
+      try:
+        bot.play_a_game("Fortnite")
+      except Exception as e:
+        raise
+
+      bot.close()
+
+  except Exception as e:
+    raise
+
+@app.command()
+def search_on_bing():
+  try:
+    with Rewards() as bot:
+
+      try:
+        bot.search_on_bing()
+      except Exception as e:
+        raise
+
+      bot.close()
+
+  except Exception as e:
+    raise
+
 def setup_logging():
   logging.basicConfig(
     level=logging.INFO,
@@ -34,7 +84,6 @@ def setup_logging():
 
 if __name__ == "__main__":
   setup_logging()
-
   logging.info("Bot started")
-  run_bot()
+  app()
   logging.info("Bot finished")
