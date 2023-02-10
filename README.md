@@ -45,13 +45,13 @@ cp .env.example .env
 ## Start bot:
 
 ```sh
-python3.9 -m rewards run 
+python -m rewards run 
 ```
 
 You can also run the following scripts through the command line:
 
 | Script    | Description                                                                                           |
 | :-------- | :------------------------------------------------------------------------------------------------ |
-| ```python3.9 -m rewards find-available-tasks```  | Checks available tasks and click on them |
-| ```python3.9 -m rewards play-a-game```  | Runs Fortnite on Xbox Cloud |
-| ```python3.9 -m rewards search-on-bing``` | Searches on Bing website |
+| ```python -m rewards find-available-tasks```  | Checks available tasks and click on them |
+| ```python -m rewards play-a-game```  | Runs Fortnite on Xbox Cloud |
+| ```python -m rewards search-on-bing``` | Searches on Bing website |
