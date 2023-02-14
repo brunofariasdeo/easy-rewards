@@ -99,7 +99,8 @@ class Rewards(webdriver.Edge):
         rewardsPointsBeforeSearch = self.get_current_rewards_points()
         logging.info("You currently have " + rewardsPointsBeforeSearch + " points.")
 
-        self.type_in_search_bar(generatedSentence)
+        truncatedSentence = generatedSentence[:10]
+        self.type_in_search_bar(truncatedSentence)
         time.sleep(5)
 
         if (rewardsPointsBeforeSearch == self.get_current_rewards_points()):
