@@ -86,9 +86,10 @@ class Rewards(webdriver.Edge):
     self.navigate_to_page("https://bing.com")
 
     logging.info("Starting Bing search.")
+    documentGenerator = DocumentGenerator()
+
     try:
       while(self.pointsToRedeem):
-        documentGenerator = DocumentGenerator()
         generatedSentence = documentGenerator.sentence()
         
         time.sleep(random.randint(0, 9))
