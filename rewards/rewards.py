@@ -11,12 +11,12 @@ import rewards.constants as constants
 import time
 
 class Rewards(webdriver.Edge):
-  def __init__(self):
+  def __init__(self, headless = False):
     self.pointsToRedeem = True
     self.tasksToClick = True
-
     options = Options()
-    options.add_argument("headless")
+
+    options.add_argument("headless" if headless else "None") 
     options.add_argument(f'user-data-dir={constants.PROFILE_PATH}')
     options.add_argument(f'profile-directory={constants.PROFILE_NAME}')
 
@@ -86,9 +86,12 @@ class Rewards(webdriver.Edge):
     self.navigate_to_page("https://bing.com")
 
     logging.info("Starting Bing search.")
+    documentGenerator = DocumentGenerator()
+
     try:
+      numberOfAttempts = 0
+
       while(self.pointsToRedeem):
-        documentGenerator = DocumentGenerator()
         generatedSentence = documentGenerator.sentence()
         
         time.sleep(random.randint(0, 9))
@@ -96,10 +99,14 @@ class Rewards(webdriver.Edge):
         rewardsPointsBeforeSearch = self.get_current_rewards_points()
         logging.info("You currently have " + rewardsPointsBeforeSearch + " points.")
 
-        self.type_in_search_bar(generatedSentence)
+        truncatedSentence = generatedSentence[:10]
+        self.type_in_search_bar(truncatedSentence)
         time.sleep(5)
 
         if (rewardsPointsBeforeSearch == self.get_current_rewards_points()):
+          numberOfAttempts += 1
+
+        if (rewardsPointsBeforeSearch == self.get_current_rewards_points() and numberOfAttempts == 3):
           logging.info("You've already completed all searches. Moving on.")
           self.pointsToRedeem = False
     except Exception as e:

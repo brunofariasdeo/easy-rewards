@@ -6,9 +6,9 @@ import typer
 app = typer.Typer()
 
 @app.command()
-def run():
+def run(headless: bool = typer.Option(False, "--headless")):
   try:
-    with Rewards() as bot:
+    with Rewards(headless) as bot:
 
       try:
         bot.navigate_to_page('https://rewards.bing.com/')
@@ -31,14 +31,14 @@ def run():
     raise
 
 @app.command()
-def find_available_tasks():
+def find_available_tasks(headless: bool = typer.Option(False, "--headless")):
   try:
-    with Rewards() as bot:
-
+    with Rewards(headless) as bot:
       try:
         bot.navigate_to_page('https://rewards.bing.com/')
         bot.find_available_tasks()
       except Exception as e:
+        print(e)
         raise
 
       bot.close()
@@ -47,9 +47,9 @@ def find_available_tasks():
     raise
 
 @app.command()
-def play_a_game():
+def play_a_game(headless: bool = typer.Option(False, "--headless")):
   try:
-    with Rewards() as bot:
+    with Rewards(headless) as bot:
 
       try:
         bot.play_a_game("Fortnite")
@@ -62,9 +62,9 @@ def play_a_game():
     raise
 
 @app.command()
-def search_on_bing():
+def search_on_bing(headless: bool = typer.Option(False, "--headless")):
   try:
-    with Rewards() as bot:
+    with Rewards(headless) as bot:
 
       try:
         bot.search_on_bing()
@@ -79,7 +79,11 @@ def search_on_bing():
 def setup_logging():
   logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s %(levelname)s:%(message)s'
+    format='%(asctime)s %(levelname)s:%(message)s',
+    handlers=[
+      logging.FileHandler("./logs/logs.txt"),
+      logging.StreamHandler()
+    ]
   )
 
 if __name__ == "__main__":
