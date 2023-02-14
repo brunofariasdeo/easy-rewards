@@ -79,7 +79,11 @@ def search_on_bing(headless: bool = typer.Option(False, "--headless")):
 def setup_logging():
   logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s %(levelname)s:%(message)s'
+    format='%(asctime)s %(levelname)s:%(message)s',
+    handlers=[
+      logging.FileHandler("./logs/logs.txt"),
+      logging.StreamHandler()
+    ]
   )
 
 if __name__ == "__main__":
