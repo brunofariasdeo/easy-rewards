@@ -89,6 +89,8 @@ class Rewards(webdriver.Edge):
     documentGenerator = DocumentGenerator()
 
     try:
+      numberOfAttempts = 0
+
       while(self.pointsToRedeem):
         generatedSentence = documentGenerator.sentence()
         
@@ -101,6 +103,9 @@ class Rewards(webdriver.Edge):
         time.sleep(5)
 
         if (rewardsPointsBeforeSearch == self.get_current_rewards_points()):
+          numberOfAttempts += 1
+
+        if (rewardsPointsBeforeSearch == self.get_current_rewards_points() and numberOfAttempts == 3):
           logging.info("You've already completed all searches. Moving on.")
           self.pointsToRedeem = False
     except Exception as e:
