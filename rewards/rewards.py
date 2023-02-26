@@ -3,6 +3,8 @@ from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from essential_generators import DocumentGenerator
 import logging
@@ -48,7 +50,6 @@ class Rewards(webdriver.Edge):
         logging.info("Authenticating.")
         authenticateButton.click()
     except Exception as e:
-      self.take_a_screenshot()
       logging.info("Login button not found.")
       time.sleep(5)
 
@@ -63,6 +64,9 @@ class Rewards(webdriver.Edge):
   def play_a_game(self, gameName):
     self.navigate_to_page("https://www.xbox.com/pt-BR/play")
     logging.info("Opening Xbox Cloud.")
+
+    xboxCloudLogoXpath = f'//button[contains(@class, "XboxButton")]'
+    self.wait_for_element(xboxCloudLogoXpath)
 
     self.find_login_button()
 
@@ -134,3 +138,7 @@ class Rewards(webdriver.Edge):
     searchBar.send_keys(Keys.SHIFT + Keys.HOME)
     searchBar.send_keys(string)
     searchBar.send_keys(Keys.ENTER)
+
+  def wait_for_element(self, element):
+    logging.info("Waiting for page to be loaded")
+    WebDriverWait(self, 10).until(EC.presence_of_element_located((By.XPATH, element)))
