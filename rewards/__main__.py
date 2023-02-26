@@ -1,5 +1,6 @@
 import logging
 from rewards.rewards import Rewards
+import os
 import time
 import typer
 
@@ -77,6 +78,9 @@ def search_on_bing(headless: bool = typer.Option(False, "--headless")):
     raise
 
 def setup_logging():
+  if not os.path.exists("./logs/"):
+    os.makedirs("./logs/")
+
   logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s %(levelname)s:%(message)s',
