@@ -18,7 +18,8 @@ class Rewards(webdriver.Edge):
     self.tasksToClick = True
     options = Options()
 
-    options.add_argument("headless" if headless else "None") 
+    options.add_argument("headless" if headless else "None")
+    options.add_argument("--mute-audio")
     options.add_argument(f'user-data-dir={constants.PROFILE_PATH}')
     options.add_argument(f'profile-directory={constants.PROFILE_NAME}')
 
