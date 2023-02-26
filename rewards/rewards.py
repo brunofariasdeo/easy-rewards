@@ -48,6 +48,7 @@ class Rewards(webdriver.Edge):
         logging.info("Authenticating.")
         authenticateButton.click()
     except Exception as e:
+      self.take_a_screenshot()
       logging.info("Login button not found.")
       time.sleep(5)
 
@@ -79,6 +80,7 @@ class Rewards(webdriver.Edge):
 
       time.sleep(600)
     except Exception as e:
+      self.take_a_screenshot()
       logging.info("Game not found. Moving on.")
 
 
@@ -110,6 +112,7 @@ class Rewards(webdriver.Edge):
           logging.info("You've already completed all searches. Moving on.")
           self.pointsToRedeem = False
     except Exception as e:
+      self.take_a_screenshot()
       logging.error("Error while trying to search on Bing.", e)
       time.sleep(2)
 
@@ -120,6 +123,10 @@ class Rewards(webdriver.Edge):
     self.switch_to.window(window_name=window_name)
 
     time.sleep(5)
+
+  def take_a_screenshot(self):
+    logging.info("Taking a browser screenshot...")
+    self.save_screenshot('./logs/rewards' + time.strftime("%Y%m%d-%H%M%S") + '.png')
 
   def type_in_search_bar(self, string):
     logging.info("Searching for: " + string)
