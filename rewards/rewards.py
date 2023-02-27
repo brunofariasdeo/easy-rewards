@@ -3,6 +3,8 @@ from selenium.webdriver.edge.options import Options
 from selenium.webdriver.edge.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from essential_generators import DocumentGenerator
 import logging
@@ -16,7 +18,8 @@ class Rewards(webdriver.Edge):
     self.tasksToClick = True
     options = Options()
 
-    options.add_argument("headless" if headless else "None") 
+    options.add_argument("headless" if headless else "None")
+    options.add_argument("--mute-audio")
     options.add_argument(f'user-data-dir={constants.PROFILE_PATH}')
     options.add_argument(f'profile-directory={constants.PROFILE_NAME}')
 
@@ -63,6 +66,9 @@ class Rewards(webdriver.Edge):
     self.navigate_to_page("https://www.xbox.com/pt-BR/play")
     logging.info("Opening Xbox Cloud.")
 
+    xboxCloudLogoXpath = f'//button[contains(@class, "XboxButton")]'
+    self.wait_for_element(xboxCloudLogoXpath)
+
     self.find_login_button()
 
     try:
@@ -79,6 +85,7 @@ class Rewards(webdriver.Edge):
 
       time.sleep(600)
     except Exception as e:
+      self.take_a_screenshot()
       logging.info("Game not found. Moving on.")
 
 
@@ -110,6 +117,7 @@ class Rewards(webdriver.Edge):
           logging.info("You've already completed all searches. Moving on.")
           self.pointsToRedeem = False
     except Exception as e:
+      self.take_a_screenshot()
       logging.error("Error while trying to search on Bing.", e)
       time.sleep(2)
 
@@ -121,9 +129,17 @@ class Rewards(webdriver.Edge):
 
     time.sleep(5)
 
+  def take_a_screenshot(self):
+    logging.info("Taking a browser screenshot...")
+    self.save_screenshot('./logs/rewards' + time.strftime("%Y%m%d-%H%M%S") + '.png')
+
   def type_in_search_bar(self, string):
     logging.info("Searching for: " + string)
     searchBar = self.find_element(By.ID, 'sb_form_q')
     searchBar.send_keys(Keys.SHIFT + Keys.HOME)
     searchBar.send_keys(string)
     searchBar.send_keys(Keys.ENTER)
+
+  def wait_for_element(self, element):
+    logging.info("Waiting for page to be loaded")
+    WebDriverWait(self, 10).until(EC.presence_of_element_located((By.XPATH, element)))
