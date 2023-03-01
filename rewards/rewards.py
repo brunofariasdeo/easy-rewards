@@ -17,8 +17,9 @@ class Rewards(webdriver.Edge):
     self.pointsToRedeem = True
     self.tasksToClick = True
     options = Options()
-
-    options.add_argument("headless" if headless else "None")
+    # The argument "--headless" is currently not working due to a Chrome Webdriver bug,
+    # as per https://github.com/SeleniumHQ/selenium/issues/11634
+    options.add_argument("headless=new" if headless else "None")
     options.add_argument("--mute-audio")
     options.add_argument(f'user-data-dir={constants.PROFILE_PATH}')
     options.add_argument(f'profile-directory={constants.PROFILE_NAME}')
