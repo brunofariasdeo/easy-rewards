@@ -73,7 +73,7 @@ class Rewards(webdriver.Edge):
     self.find_login_button()
 
     try:
-      game = self.find_element(By.XPATH, f'//div[contains(text(), "{gameName}")]/ancestor::div[contains(@class, "BaseItem")]')
+      game = self.find_element(By.XPATH, f'//button//div[contains(text(), "{gameName}")]/ancestor::div[contains(@class, "BaseItem")]')
       game.click()
       logging.info("Game found. Clicked on it.")
 

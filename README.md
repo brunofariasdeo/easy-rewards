@@ -7,8 +7,6 @@ Easy Rewards is an application made to automate some of the Microsoft Rewards ac
 
 ## Install
 
-Make sure that you have the Gatsby CLI program installed:
-
 ```sh
 pip install -r requirements.txt
 ```
