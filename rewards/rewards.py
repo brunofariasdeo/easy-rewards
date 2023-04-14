@@ -56,7 +56,12 @@ class Rewards(webdriver.Edge):
       time.sleep(5)
 
   def get_current_rewards_points(self):
-    return self.find_element(By.ID, 'id_rc').text
+    try:
+      return self.find_element(By.ID, 'id_rc').text
+    except Exception as e:
+      logging.info("Could not retrieve rewards points.")
+      self.take_a_screenshot()
+      time.sleep(5)
 
   def navigate_to_page(self, url):
     logging.info("Navigating to page: " + url)
