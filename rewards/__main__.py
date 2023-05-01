@@ -5,6 +5,7 @@ import time
 import typer
 
 app = typer.Typer()
+print('oi')
 
 @app.command()
 def run(headless: bool = typer.Option(False, "--headless")):
