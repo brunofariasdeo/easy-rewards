@@ -1,0 +1,2 @@
+[MASTER]
+disable=import-error,missing-class-docstring,missing-module-docstring,missing-function-docstring,no-name-in-module
