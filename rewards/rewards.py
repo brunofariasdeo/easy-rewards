@@ -29,7 +29,14 @@ class Rewards(webdriver.Edge):
         super(Rewards, self).__init__(options=options, service=service)
 
     def find_available_tasks(self):
-        logging.info("Finding available tasks")
+        logging.info("Finding all available tasks")
+
+        self.find_promotional_tasks()
+        self.find_standard_tasks()
+
+    def find_standard_tasks(self):
+        logging.info("Finding standard tasks")
+
         try:
             while self.tasks_to_click:
                 available_task = self.find_element(
@@ -42,7 +49,70 @@ class Rewards(webdriver.Edge):
 
                 self.switch_page_to_home()
         except NoSuchElementException:
-            logging.info("You've already completed all tasks. Moving on.")
+            logging.info("You've already completed all standard tasks. Moving on.")
+            self.tasks_to_click = False
+
+    def find_promotional_tasks(self):
+        logging.info("Finding promotional tasks")
+
+        try:
+            seasonal_task = self.find_element(
+                By.XPATH,
+                '//div[contains(@class, "promotional-container")]//div[contains(@class, "actionLink")]//span[contains(@class, "callToAction")]',
+            )
+            seasonal_task.click()
+            logging.info("Element found. Clicked on it.")
+
+            time.sleep(5)
+
+            self.switch_page_to_home()
+        except NoSuchElementException:
+            logging.info("You've already completed all promotional tasks. Moving on.")
+
+    def find_seasonal_tasks(self):
+        logging.info("Finding seasonal tasks")
+
+        seasonal_tasks_to_click = True
+
+        try:
+            while seasonal_tasks_to_click:
+                free_season_task_bullet = self.find_element(
+                    By.XPATH, '//div[contains(@class, "sequence-indicator")]//button[contains(@tabindex, "0")]'
+                )
+                free_season_task_bullet.click()
+
+                logging.info("Carrousel bullet element clicked.")
+
+                time.sleep(5)
+
+                seasonal_task_action = self.find_element(
+                    By.XPATH, '//section[contains(@class, "hero-item")]//span[contains(@class, "pointLink")]'
+                )
+
+                seasonal_task_action.click()
+                logging.info("Seasonal task found. Clicked on it.")
+
+                time.sleep(5)
+                self.switch_to.window(self.window_handles[1])
+                logging.info("Switching to seasonal tasks list.")
+
+                number_of_subtasks = len(self.find_elements(By.XPATH, '//div[contains(@class, "punchcard-row")]'))
+
+                for subtask_number in range(number_of_subtasks):
+                    time.sleep(5)
+
+                    subtask_button = self.find_element(
+                        By.XPATH, f'//div[contains(@class, "punchcard-row")][{subtask_number + 1}]//button'
+                    )
+
+                    logging.info("Clicking on subtask.")
+                    subtask_button.click()
+
+                    time.sleep(5)
+
+                self.switch_page_to_home()
+        except Exception as exception:
+            logging.info("You've already completed all seasonal tasks. Moving on.")
             self.tasks_to_click = False
 
     def find_login_button(self):
@@ -54,18 +124,14 @@ class Rewards(webdriver.Edge):
             if len(authenticate_button) > 0:
                 logging.info("Authenticating.")
                 authenticate_button.click()
-        except Exception as exception:
-            print(exception)
-
+        except Exception:
             logging.info("Login button not found.")
             time.sleep(5)
 
     def get_current_rewards_points(self):
         try:
             return self.find_element(By.ID, "id_rc").text
-        except Exception as exception:
-            print(exception)
-
+        except Exception:
             logging.info("Could not retrieve rewards points.")
             self.take_a_screenshot()
             time.sleep(5)
@@ -99,9 +165,7 @@ class Rewards(webdriver.Edge):
             logging.info("%s will be running for 10 minutes. This page will be closed once finished.", game_name)
 
             time.sleep(600)
-        except Exception as exception:
-            print(exception)
-
+        except Exception:
             self.take_a_screenshot()
             logging.info("Game not found. Moving on.")
 
@@ -132,9 +196,7 @@ class Rewards(webdriver.Edge):
                 if rewards_points_before_search == self.get_current_rewards_points() and number_of_attempts == 3:
                     logging.info("You've already completed all searches. Moving on.")
                     self.points_to_redeem = False
-        except Exception as exception:
-            print(exception)
-
+        except Exception:
             self.take_a_screenshot()
             logging.error("Error while trying to search on Bing.")
             time.sleep(2)
