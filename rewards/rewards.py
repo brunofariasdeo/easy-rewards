@@ -54,9 +54,7 @@ class Rewards(webdriver.Edge):
             if len(authenticate_button) > 0:
                 logging.info("Authenticating.")
                 authenticate_button.click()
-        except Exception as exception:
-            print(exception)
-
+        except Exception:
             logging.info("Login button not found.")
             time.sleep(5)
 
