@@ -131,10 +131,8 @@ class Rewards(webdriver.Edge):
                     logging.info("You've already completed all searches. Moving on.")
                     self.points_to_redeem = False
         except Exception as exception:
-            print(exception)
-
             self.take_a_screenshot()
-            logging.error("Error while trying to search on Bing.")
+            logging.error("The following error occurred while trying to search on Bing: %s", exception)
             time.sleep(2)
 
     def switch_page_to_home(self):
