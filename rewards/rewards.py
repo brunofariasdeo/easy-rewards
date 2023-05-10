@@ -109,31 +109,32 @@ class Rewards(webdriver.Edge):
         logging.info("Starting Bing search.")
         document_generator = DocumentGenerator()
 
-        try:
-            number_of_attempts = 0
+        while self.points_to_redeem:
+            try:
+                number_of_attempts = 0
 
-            while self.points_to_redeem:
-                generated_sentence = document_generator.sentence()
+                while self.points_to_redeem:
+                    generated_sentence = document_generator.sentence()
 
-                time.sleep(random.randint(0, 9))
+                    time.sleep(random.randint(0, 9))
 
-                rewards_points_before_search = self.get_current_rewards_points()
-                logging.info("You currently have %s points.", rewards_points_before_search)
+                    rewards_points_before_search = self.get_current_rewards_points()
+                    logging.info("You currently have %s points.", rewards_points_before_search)
 
-                truncated_sentence = generated_sentence[:10]
-                self.type_in_search_bar(truncated_sentence)
-                time.sleep(5)
+                    truncated_sentence = generated_sentence[:10]
+                    self.type_in_search_bar(truncated_sentence)
+                    time.sleep(5)
 
-                if rewards_points_before_search == self.get_current_rewards_points():
-                    number_of_attempts += 1
+                    if rewards_points_before_search == self.get_current_rewards_points():
+                        number_of_attempts += 1
 
-                if rewards_points_before_search == self.get_current_rewards_points() and number_of_attempts == 3:
-                    logging.info("You've already completed all searches. Moving on.")
-                    self.points_to_redeem = False
-        except Exception as exception:
-            self.take_a_screenshot()
-            logging.error("The following error occurred while trying to search on Bing: %s", exception)
-            time.sleep(2)
+                    if rewards_points_before_search == self.get_current_rewards_points() and number_of_attempts == 3:
+                        logging.info("You've already completed all searches. Moving on.")
+                        self.points_to_redeem = False
+            except Exception as exception:
+                self.take_a_screenshot()
+                logging.error("The following error occurred while trying to search on Bing: %s", exception)
+                time.sleep(2)
 
     def switch_page_to_home(self):
         logging.info("Going back to the previous page.")
