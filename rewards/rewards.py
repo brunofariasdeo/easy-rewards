@@ -33,6 +33,7 @@ class Rewards(webdriver.Edge):
 
         self.find_promotional_tasks()
         self.find_standard_tasks()
+        self.find_seasonal_tasks()
 
     def find_standard_tasks(self):
         logging.info("Finding standard tasks")
@@ -108,10 +109,35 @@ class Rewards(webdriver.Edge):
                     logging.info("Clicking on subtask.")
                     subtask_button.click()
 
+                    time.sleep(2)
+
+                    self.switch_to.window(self.window_handles[2])
+
+                    logging.info("Switching to subtask page.")
+
+                    quiz_section = self.find_element(By.XPATH, '//div[contains(@id, "quizWelcomeContainer")]')
+
+                    if quiz_section:
+                        time.sleep(3)
+                        start_quiz_button = self.find_element(By.XPATH, '//input[contains(@id, "StartQuiz")]')
+                        start_quiz_button.click()
+                        time.sleep(3)
+
+                        logging.info("Starting quiz.")
+
+                        for question in range(10):
+                            for answer_position in range(4):
+                                time.sleep(3)
+                                answer_option = self.find_element(
+                                    By.XPATH, f'//div[contains(@class, "rq_button")][{answer_position+1}]'
+                                )
+                                answer_option.click()
+                                time.sleep(3)
+
                     time.sleep(5)
 
                 self.switch_page_to_home()
-        except Exception as exception:
+        except Exception:
             logging.info("You've already completed all seasonal tasks. Moving on.")
             self.tasks_to_click = False
 
