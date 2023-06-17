@@ -3,13 +3,14 @@ import random
 import time
 from selenium import webdriver
 from selenium.webdriver.edge.options import Options
-from selenium.webdriver.edge.service import Service
+from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from essential_generators import DocumentGenerator
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 import rewards.constants as constants
 
 
@@ -17,15 +18,14 @@ class Rewards(webdriver.Edge):
     def __init__(self, headless=False):
         self.points_to_redeem = True
         self.tasks_to_click = True
+
         options = Options()
-        # The argument "--headless" is currently not working due to a Chrome Webdriver bug,
-        # as per https://github.com/SeleniumHQ/selenium/issues/11634
-        options.add_argument("headless=new" if headless else "None")
+        options.add_argument("--headless" if headless else "None")
         options.add_argument("--mute-audio")
         options.add_argument(f"user-data-dir={constants.PROFILE_PATH}")
         options.add_argument(f"profile-directory={constants.PROFILE_NAME}")
 
-        service = Service(executable_path=constants.EXECUTABLE_PATH)
+        service = EdgeService(EdgeChromiumDriverManager().install())
         super(Rewards, self).__init__(options=options, service=service)
 
     def find_available_tasks(self):
